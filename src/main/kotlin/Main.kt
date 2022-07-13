@@ -1,59 +1,43 @@
 fun main() {
-    val address1 = Address("Kazan", "Spartakovskaya", 2)
-    val address2 = address1.copy()
-    val (cityName, avenueName, houseNumber) = address1
-    println(
-        """
-        address1: $address1,
-        address2: $address2,
-        address1 city: ${address1.cityName}, avenue: ${address1.avenueName}, house: ${address1.houseNumber}
-        address2 city: ${address2.cityName}, avenue: ${address2.avenueName}, house: ${address2.houseNumber}
-        address1 hashCode: ${address1.hashCode()}
-        address2 hashCode: ${address2.hashCode()}
-        equals: ${address1.equals(address2)}
-    """.trimIndent()
-    )
-    println("$cityName $avenueName $houseNumber")
+    val car: Transport = Car()
+    val bicycle: Transport = Bicycle()
+    if (car is Car) {
+        car.name = "Машина2"
+    }
+    // Анониманый класс
+    travel(object : Transport("Автобус") {
+        override fun drive() {
+            println("Автобус едет")
+        }
+    })
 }
 
-class Address(
-    val cityName: String,
-    val avenueName: String,
-    val houseNumber: Int,
-) {
-    operator fun component1() = cityName
-    operator fun component2() = avenueName
-    operator fun component3() = houseNumber
+fun travel(transport: Transport) {
+    transport.drive()
+}
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
+abstract class Transport(open val name: String) {
 
-        other as Address
+    abstract fun drive()
+}
 
-        if (cityName != other.cityName) return false
-        if (avenueName != other.avenueName) return false
-        if (houseNumber != other.houseNumber) return false
-
+// Возможно переопределять не только методы, но и поля
+// для этого в родительстком классе определяем поле через open,
+// в дочернем добавить модификатор override, и произвести
+// проверку приведения типов через is
+class Car(override var name: String = "Машина") : Transport(name) {
+    fun startEngine(): Boolean {
+        println("Запускаю двигатель...")
         return true
     }
 
-    override fun hashCode(): Int {
-        var result = cityName.hashCode()
-        result = 31 * result + avenueName.hashCode()
-        result = 31 * result + houseNumber
-        return result
+    override fun drive() {
+        println("Машина едет...")
     }
+}
 
-    fun copy(
-        cityName:String = this.cityName,
-        avenueName:String = this.avenueName,
-        houseNumber:Int = this.houseNumber,
-    ): Address {
-        return Address(cityName, avenueName, houseNumber)
-    }
-
-    override fun toString(): String {
-        return "Address(cityName='$cityName', avenueName='$avenueName', houseNumber=$houseNumber)"
+class Bicycle : Transport("Велосипед") {
+    override fun drive() {
+        println("Велосипед едет...")
     }
 }

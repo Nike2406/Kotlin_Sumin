@@ -1,43 +1,15 @@
+import main.kotlin.MyArrayList
+import main.kotlin.MyList
+
 fun main() {
-    val car: Transport = Car()
-    val bicycle: Transport = Bicycle()
-    if (car is Car) {
-        car.name = "Машина2"
+    val list: MyList<Int> = MyArrayList()
+    for (i in 0..100) {
+        list.add(i)
     }
-    // Анониманый класс
-    travel(object : Transport("Автобус") {
-        override fun drive() {
-            println("Автобус едет")
-        }
-    })
-}
-
-fun travel(transport: Transport) {
-    transport.drive()
-}
-
-abstract class Transport(open val name: String) {
-
-    abstract fun drive()
-}
-
-// Возможно переопределять не только методы, но и поля
-// для этого в родительстком классе определяем поле через open,
-// в дочернем добавить модификатор override, и произвести
-// проверку приведения типов через is
-class Car(override var name: String = "Машина") : Transport(name) {
-    fun startEngine(): Boolean {
-        println("Запускаю двигатель...")
-        return true
+    for (i in 0..90) {
+        list.removeAt(0)
     }
-
-    override fun drive() {
-        println("Машина едет...")
-    }
-}
-
-class Bicycle : Transport("Велосипед") {
-    override fun drive() {
-        println("Велосипед едет...")
+    for (i in 0 until list.size()) {
+        println(list.get(i))
     }
 }
